@@ -34,7 +34,21 @@ class Model {
                 return
             }
             
-            // Parsing the data into video objects
+            // TODO: do/catch, is there a try/catch?
+            do {
+                // Parsing the data into video objects
+                let decoder = JSONDecoder()
+                // Set the date decoding strategy
+                // The date format from the YouTube API is ISO-8601
+                decoder.dateDecodingStrategy = .iso8601
+                let response = try decoder.decode(Response.self, from: data!)
+                
+                // TODO: What does this do?
+                dump(response)
+                
+            } catch {
+                
+            }
         }
         
         // Kick off the task
