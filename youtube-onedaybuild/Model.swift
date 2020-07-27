@@ -8,7 +8,14 @@
 
 import Foundation
 
+// TODO: Are protocols like interfaces to be implemented?
+protocol ModelDelegate {
+    func videosFetched(_ videos:[Video])
+}
+
 class Model {
+    
+    var delegate: ModelDelegate?
     
     func getVideos() {
         
@@ -42,6 +49,15 @@ class Model {
                 // The date format from the YouTube API is ISO-8601
                 decoder.dateDecodingStrategy = .iso8601
                 let response = try decoder.decode(Response.self, from: data!)
+                
+                // Call the "videosReturned" method of the delegate
+                if response.items != nil {
+                    
+                    DispatchQueue.main.async {
+                        self.delegate?.videosFetched(response.items!)
+                    }
+                }
+                
                 
                 // TODO: What does this do?
                 dump(response)
